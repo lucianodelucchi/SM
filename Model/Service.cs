@@ -19,6 +19,7 @@ namespace SM.Model
 		Service()
 		{
 			this.SC = new AsyncLazy<ServiceController>(() => new ServiceController(this.ServiceName));
+			//TODO: extract an interface and inject an implementation
 			this.WMI = new WMI();
 		}
 		
