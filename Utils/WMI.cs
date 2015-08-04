@@ -4,17 +4,13 @@ using System.Threading.Tasks;
 
 namespace SM.Utils
 {
-	/// <summary>
-	/// Description of WMI.
-	/// </summary>
 	internal sealed class WMI
 	{
-		readonly string ServiceName;
+		public string ServiceName { get; set; }
 		static AsyncLazy<ManagementObject> ManagementObject;
 		
-		public WMI(string serviceName)
+		public WMI()
 		{
-			ServiceName = serviceName;
 			ManagementObject = new AsyncLazy<ManagementObject>(() => new ManagementObject());
 		}
 		
