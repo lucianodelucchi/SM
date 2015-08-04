@@ -7,7 +7,7 @@ namespace SM
 {
 	public static class ServiceManager
 	{
-		public static IObservable<Service> GetServices()
+		public static IObservable<IService> GetServices()
 		{
 			return ServiceController.GetServices().ToObservable().SelectMany(async s => await Service.FromServiceControllerAsync(s));
 		}
