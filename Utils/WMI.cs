@@ -16,6 +16,16 @@ namespace SM.Utils
 		
 		public async Task<string> GetWMIProperty(string field)
 		{
+			if (string.IsNullOrEmpty(field)) 
+			{
+				throw new ArgumentNullException("field");
+			}
+			
+			if (string.IsNullOrEmpty(this.ServiceName)) 
+			{
+				throw new InvalidOperationException("You have to provide a valid ServiceName before calling this method.");
+			}
+			
 			var wmiService = await ManagementObject;
 			wmiService.Path = new ManagementPath("Win32_Service.Name='" + ServiceName + "'");
 			wmiService.Get();
