@@ -5,7 +5,7 @@ using SM.Utils;
 
 namespace SM.Model
 {
-	public sealed class Service
+	public sealed class Service : IService
 	{
 		public string ServiceName { get; private set; }
 		public string Description { get; private set; }
@@ -13,21 +13,23 @@ namespace SM.Model
 		public string DisplayName { get; private set; }
 		
 		AsyncLazy<ServiceController> SC { get; set; }
-			
+		
+		WMI WMI;
+		
 		Service()
 		{
-			this.SC = new AsyncLazy<ServiceController>(() => new ServiceController(this.ServiceName));                                            
+			this.SC = new AsyncLazy<ServiceController>(() => new ServiceController(this.ServiceName));
+			this.WMI = new WMI();
 		}
 		
-		public static async Task<Service> FromServiceControllerAsync(ServiceController sc)
-		{
-			var wmi = new WMI(sc.ServiceName);
-			
+		public static async Task<IService> FromServiceControllerAsync(ServiceController sc)
+		{			
 			var s = new Service();
+			s.WMI.ServiceName = sc.ServiceName; 
 			s.ServiceName = sc.ServiceName;
-			s.Description = await wmi.GetWMIProperty("Description");
-			s.StartName = await wmi.GetWMIProperty("StartName");
-			s.DisplayName = await wmi.GetWMIProperty("DisplayName");
+			s.Description = await s.WMI.GetWMIProperty("Description");
+			s.StartName = await s.WMI.GetWMIProperty("StartName");
+			s.DisplayName = await s.WMI.GetWMIProperty("DisplayName");
 			
 			return s;
 		}
