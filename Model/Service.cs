@@ -11,6 +11,7 @@ namespace SM.Model
 		public string Description { get; private set; }
 		public string StartName { get; private set; }
 		public string DisplayName { get; private set; }
+		public ServiceControllerStatus Status { get; private set; }
 		
 		AsyncLazy<ServiceController> SC { get; set; }
 		
@@ -28,16 +29,18 @@ namespace SM.Model
 			var s = new Service();
 			s.WMI.ServiceName = sc.ServiceName; 
 			s.ServiceName = sc.ServiceName;
-			s.Description = await s.WMI.GetWMIProperty("Description");
-			s.StartName = await s.WMI.GetWMIProperty("StartName");
-			s.DisplayName = await s.WMI.GetWMIProperty("DisplayName");
+			s.Status = sc.Status;
+			s.Description = await s.WMI.GetWMIProperty("Description").ConfigureAwait(false);
+			s.StartName = await s.WMI.GetWMIProperty("StartName").ConfigureAwait(false);;
+			s.DisplayName = await s.WMI.GetWMIProperty("DisplayName").ConfigureAwait(false);;
 			
 			return s;
 		}
 		
 		public async Task<ServiceControllerStatus> GetStatus()
 		{
-			return (await this.SC).Status;
+			Status = (await this.SC).Status;
+			return Status;
 		}
 		
 		public async Task Continue()

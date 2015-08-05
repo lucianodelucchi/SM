@@ -10,6 +10,9 @@ namespace SM.Model
 		string Description { get; }
 		string StartName { get; }
 		string DisplayName { get; }
+		ServiceControllerStatus Status{ get; }
+		
+		
 		
 		Task<ServiceControllerStatus> GetStatus();
 		
